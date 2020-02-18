@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}">
+    <title>list</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="../bootstrap3/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../bootstrap3/font-awesome-4.7.0/css/font-awesome.css"/>
+
+</head>
+<body>
+    <h1>员工列表</h1>
+    <div th:replace="commons/bar :: topbar"></div>
+
+    <div th:replace="commons/bar :: #listbar(activeUri='emps')"></div>
+    <h2><a  class="btn btn-sm btn-success" th:href="@{/emp}">添加员工</a></h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>编号</th>
+                <th>名字</th>
+                <th>性别</th>
+                <th>地址</th>
+                <th>部门</th>
+                <th>生日</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="emp:${emps}">
+                <td th:text="${emp.id}"></td>
+                <td >[[${emp.name}]]</td>
+                <td th:text="${emp.gender==0?'女':'男'}"></td>
+                <td th:text="${emp.adress}"></td>
+                <td th:text="${emp.department}"></td>
+                <td th:text="${#dates.format(emp.birth,'yyyy-MM-dd HH mm')}"></td>
+                <td>
+                    <a  class="btn btn-sm btn-primary" th:href="@{/emp/}+${emp.id}">编辑</a>
+                    <button th:attr="del_uri=@{/emp/}+${emp.id}" class="btn btn-sm btn-danger deletebtn">删除</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <form id="deleteempform" method="post">
+        <input type="hidden" name="_method" value="Delete"/>
+    </form>
+
+
+</body>
+<script type="text/javascript" src="../bootstrap3/jquery.min.js"></script>
+<script type="text/javascript" src="../bootstrap3/js/bootstrap.js"></script>
+<script type="text/javascript" src="../bootstrap3/js/holder.js"></script>
+<script type="text/javascript" src="../bootstrap3/js/html5shiv.min.js"></script>
+<script type="text/javascript" src="../bootstrap3/js/css3-mediaqueries.js"></script>
+<script type="text/javascript" src="../bootstrap3/js/respond.min.js"></script>
+<script th:src="@{/webjars/jquery/3.3.1-2/jquery.min.js}"></script>
+<script>
+    $(".deletebtn").click(function(){
+        //删除当前员工
+        $("#deleteempform").attr("action",$(this).attr("del_uri")).submit();
+        return false;
+    });
+</script>
+</html>

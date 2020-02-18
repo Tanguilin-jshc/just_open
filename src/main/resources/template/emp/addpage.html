@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}">
+    <title>addpage</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="../bootstrap3/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../bootstrap3/font-awesome-4.7.0/css/font-awesome.css"/>
+</head>
+<body>
+<!--需要区分是员工修改还是员工添加,如果是修改页面应该发送put请求-->
+<!--1.springmvc中配置HiddenHttpMethodFilter(springboot自动配置好的)
+    2.页面创建一个post表单
+    3.创建一个Input项，name="_method",值就是我们指定的请求方式-->
+<form th:action="@{/emp}" method="post">
+    <input type="hidden" name="_method" value="put" th:if="${emp!=null}"/>
+    <input type="hidden" name="id" th:value="${emp.id}" th:if="${emp!=null}"/>
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" name="name" id="username" placeholder="Username" th:value="${emp!=null}?${emp.getName()}">
+    </div>
+    <div class="form-group">
+        <label for="adress">Adress</label>
+        <input type="text" class="form-control" name="adress" id="adress" placeholder="Adress" th:value="${emp}!=null?${emp.adress}">
+    </div>
+    <div class="form-group">
+        <label for="birth">Birth</label>
+        <input type="text" class="form-control" id="birth" name="birth" placeholder="birth" th:value="${emp!=null}?${#dates.format(emp.birth,'yyyy-mm-dd HH mm')}">
+    </div>
+   <div class="form-group">
+       <label>部门</label>
+       <select class="form-control" name="department">
+           <option th:selected="${emp!=null}?${emp.department==dept.name}" th:value="${dept.name}"  th:each="dept:${depts}" th:text="${dept.name}"></option>
+       </select>
+   </div>
+    <label class="radio-inline">
+        <input type="radio" name="gender" id="man" value="1" th:checked="${emp!=null}?${emp.gender==1}"> 男
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="gender" id="woman" value="2" th:checked="${emp!=null}?${emp.gender==0}"> 女
+    </label><br>
+    <button type="submit" class="btn btn-primary" th:text="${emp!=null}?'修改':'添加'">添加</button>
+</form>
+</body>
+<script type="text/javascript" src="../bootstrap3/jquery.min.js"></script>
+<script type="text/javascript" src="../bootstrap3/js/bootstrap.js"></script>
+<script type="text/javascript" src="../bootstrap3/js/holder.js"></script>
+<script type="text/javascript" src="../bootstrap3/js/html5shiv.min.js"></script>
+<script type="text/javascript" src="../bootstrap3/js/css3-mediaqueries.js"></script>
+<script type="text/javascript" src="../bootstrap3/js/respond.min.js"></script>
+</html>
